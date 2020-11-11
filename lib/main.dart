@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       navigatorKey: navigatorKey,
       home: Scaffold(
-        /*appBar: AppBar(
+        appBar: AppBar(
           title: Text("Mobion"),
           actions: <Widget>[
             PopupMenuButton(
@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
               },
             ),
           ],
-        ),*/
+        ),
         body: MyHomePage(),
       )
     );
@@ -69,8 +69,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndexForBottomNavigationBar = 0;
   int _selectedIndexForTabBar = 0;
-  final navigatorKey = GlobalKey<NavigatorState>();
 
+  final navigatorKey = GlobalKey<NavigatorState>();
 
   //1
   static List<Widget> _listOfIconsForBottomNavigationBar = <Widget>[
@@ -107,10 +107,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-
-    navigatorKey: navigatorKey;
-
-    //5
     final tabBar = new TabBar(labelColor: Colors.white,
       onTap: _onItemTappedForTabBar,
       tabs: <Widget>[
@@ -118,51 +114,17 @@ class _MyHomePageState extends State<MyHomePage> {
           text: "DialPad",
         ),
         new Tab(
-          text: "Call Log",
+          text: "CallLogs",
         ),
-        /*new Tab(
+        new Tab(
           text: "RAILWAY",
-        ),*/
+        ),
       ],
     );
 
-    //6
     return new DefaultTabController(length: 2, child: new Scaffold(
-      appBar: AppBar(bottom: tabBar,backgroundColor: Colors.blue, title: Text('Mobion'),
-      actions: <Widget>[
-        PopupMenuButton(
-          itemBuilder: (content) => [
-            PopupMenuItem(
-              value: 1,
-              child: Text("SIP"),
-            ),
-            PopupMenuItem(
-              value: 2,
-              child: Text("Logout"),
-            ),
-            PopupMenuItem(
-              value: 3,
-              child: Text("More"),
-            ),
-          ],
-          onSelected: (int menu){
-            if(menu == 1){
-              navigatorKey.currentState
-                  .push(MaterialPageRoute(builder: (context) => SIP()));
-            }else if(menu == 2){
-              navigatorKey.currentState
-                  .push(MaterialPageRoute(builder: (context) => Logout()));
-            }
-            else if(menu == 3){
-              navigatorKey.currentState
-                  .push(MaterialPageRoute(builder: (context) => More()));
-            }
-          },
-        ),
-      ],
-      ),
+      appBar: AppBar(bottom: tabBar,backgroundColor: Colors.blue),
 
-      //7
       body: Center(child:_selectedIndexForTabBar == 0 ?
       _listOfIconsForBottomNavigationBar.elementAt(_selectedIndexForBottomNavigationBar):
       _listOfIconsForTabBar.elementAt(_selectedIndexForTabBar - 1)),
@@ -177,7 +139,6 @@ class _MyHomePageState extends State<MyHomePage> {
               icon: new Icon(Icons.contacts),title: Text('Contacts')),
           BottomNavigationBarItem(
               icon: Icon(Icons.settings),title: Text('Settings')),
-
         ],
         currentIndex: _selectedIndexForBottomNavigationBar,
       ),
