@@ -17,45 +17,45 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      navigatorKey: navigatorKey,
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text("Mobion"),
-          actions: <Widget>[
-            PopupMenuButton(
-              itemBuilder: (content) => [
-                PopupMenuItem(
-                  value: 1,
-                  child: Text("SIP"),
-                ),
-                PopupMenuItem(
-                  value: 2,
-                  child: Text("Logout"),
-                ),
-                PopupMenuItem(
-                  value: 3,
-                  child: Text("More"),
-                ),
-              ],
-              onSelected: (int menu){
-                if(menu == 1){
-                  navigatorKey.currentState
-                      .push(MaterialPageRoute(builder: (context) => SIP()));
-                }else if(menu == 2){
-                  navigatorKey.currentState
-                      .push(MaterialPageRoute(builder: (context) => Logout()));
-                }
-                else if(menu == 3){
-                  navigatorKey.currentState
-                      .push(MaterialPageRoute(builder: (context) => More()));
-                }
-              },
-            ),
-          ],
-        ),
-        body: MyHomePage(),
-      )
+        debugShowCheckedModeBanner: false,
+        navigatorKey: navigatorKey,
+        home: Scaffold(
+          appBar: AppBar(
+            title: Text("Mobion"),
+            actions: <Widget>[
+              PopupMenuButton(
+                itemBuilder: (content) => [
+                  PopupMenuItem(
+                    value: 1,
+                    child: Text("SIP"),
+                  ),
+                  PopupMenuItem(
+                    value: 2,
+                    child: Text("Logout"),
+                  ),
+                  PopupMenuItem(
+                    value: 3,
+                    child: Text("More"),
+                  ),
+                ],
+                onSelected: (int menu){
+                  if(menu == 1){
+                    navigatorKey.currentState
+                        .push(MaterialPageRoute(builder: (context) => SIP()));
+                  }else if(menu == 2){
+                    navigatorKey.currentState
+                        .push(MaterialPageRoute(builder: (context) => Logout()));
+                  }
+                  else if(menu == 3){
+                    navigatorKey.currentState
+                        .push(MaterialPageRoute(builder: (context) => More()));
+                  }
+                },
+              ),
+            ],
+          ),
+          body: MyHomePage(),
+        )
     );
   }
 }
@@ -67,81 +67,82 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _selectedIndexForBottomNavigationBar = 0;
+  int _selectedPage = 0;
   int _selectedIndexForTabBar = 0;
 
-  final navigatorKey = GlobalKey<NavigatorState>();
-
-  //1
-  static List<Widget> _listOfIconsForBottomNavigationBar = <Widget>[
-    Icon(Icons.home),
-    Icon(Icons.contacts),
-    Icon(Icons.settings),
+  final _pageOptions = [
+    /*   Text('Home Page',style: TextStyle(fontSize: 36.0),),
+    Text('Item 2',style: TextStyle(fontSize: 36.0),),
+    Text('Item 3',style: TextStyle(fontSize: 36.0),),*/
+    HomePage(),
+    History(),
+    Settings(),
   ];
 
-
-  //2
   static List<Widget> _listOfIconsForTabBar = <Widget>[
     Icon(Icons.dialpad),
-    Icon(Icons.history),
-    // Icon(Icons.directions_railway),
+    Icon(Icons.contacts),
   ];
 
-
-  //3
-  void _onItemTappedForBottomNavigationBar(int index) {
-    setState(() {
-      _selectedIndexForBottomNavigationBar = index;
-      _selectedIndexForTabBar = 0;
-    });
-  }
-
-
-  //4
-  void _onItemTappedForTabBar(int index) {
+  void _onItemTappedForTabBar(int index){
     setState(() {
       _selectedIndexForTabBar = index+1;
-      _selectedIndexForBottomNavigationBar = 0;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final tabBar = new TabBar(labelColor: Colors.white,
+
+    final tabBar = new TabBar(labelColor: Colors.blue,
       onTap: _onItemTappedForTabBar,
-      tabs: <Widget>[
+      tabs:<Widget> [
         new Tab(
-          text: "DialPad",
+            text: 'DialPad'
         ),
         new Tab(
-          text: "CallLogs",
-        ),
-        new Tab(
-          text: "RAILWAY",
+            text: 'Call Logs'
         ),
       ],
+
     );
-
-    return new DefaultTabController(length: 2, child: new Scaffold(
-      appBar: AppBar(bottom: tabBar,backgroundColor: Colors.blue),
-
-      body: Center(child:_selectedIndexForTabBar == 0 ?
-      _listOfIconsForBottomNavigationBar.elementAt(_selectedIndexForBottomNavigationBar):
-      _listOfIconsForTabBar.elementAt(_selectedIndexForTabBar - 1)),
-
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        onTap: _onItemTappedForBottomNavigationBar, // this will be set when a new tab is tapped
-        items: [
-          BottomNavigationBarItem(
-              icon: new Icon(Icons.home),title: Text('Home')),
-          BottomNavigationBarItem(
-              icon: new Icon(Icons.contacts),title: Text('Contacts')),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.settings),title: Text('Settings')),
-        ],
-        currentIndex: _selectedIndexForBottomNavigationBar,
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Mobion',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
-    ));
+      home: Scaffold(
+        body:
+        /* Center(
+              child: _selectedIndexForTabBar == 0 ?
+              _listOfIconsForTabBar.elementAt(_selectedIndexForTabBar -1)),*/
+        _pageOptions[_selectedPage],
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _selectedPage,
+          onTap: (int index){
+            setState(() {
+              _selectedPage = index;
+            });
+          },
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              title: Text('Home'),
+            ),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.history),
+                title: Text('History')
+            ),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.settings),
+                title: Text('Settings')
+            ),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.dialpad),
+        ),
+      ),
+    );
   }
 }
